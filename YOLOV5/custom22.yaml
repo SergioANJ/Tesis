@@ -1,0 +1,15 @@
+path: /content/datacopia
+train: /content/datacopia/images/train
+val: /content/datacopia/images/val
+test:  /content/datacopia/images/test
+
+# Classes
+names:
+  0: limones
+  1: naranjas
+  2: mandarinas
+
+
+
+# Download script/URL (optional)
+download: https://ultralytics.com/assets/coco128.zip
