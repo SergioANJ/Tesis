@@ -1,0 +1,61 @@
+import tkinter as tk
+import RPi.GPIO as GPIO
+import time
+
+# Configurar los pines GPIO
+PUL_PIN = 6
+DIR_PIN = 7
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(PUL_PIN, GPIO.OUT)
+GPIO.setup(DIR_PIN, GPIO.OUT)
+
+def change_direction():
+    selected_direction = direction_var.get()
+    print(f"Direction selected: {selected_direction}")
+    if selected_direction == "Horario":
+        GPIO.output(DIR_PIN, GPIO.HIGH)
+    else:
+        GPIO.output(DIR_PIN, GPIO.LOW)
+
+def start_motor():
+    while motor_running.get():
+        GPIO.output(PUL_PIN, GPIO.HIGH)
+        time.sleep(0.001)  # Ajusta el tiempo de pulso según sea necesario
+        GPIO.output(PUL_PIN, GPIO.LOW)
+        time.sleep(0.001)  # Ajusta el tiempo de espera según sea necesario
+
+def stop_motor():
+    motor_running.set(False)
+    GPIO.cleanup()
+
+# Crear la ventana de la interfaz gráfica
+window = tk.Tk()
+window.title("Control de Motor")
+
+# Variables de control
+direction_var = tk.StringVar()
+direction_var.set("Horario")
+
+# Etiqueta para la selección de dirección
+direction_label = tk.Label(window, text="Dirección:")
+direction_label.pack()
+
+# Menú desplegable para seleccionar la dirección
+direction_menu = tk.OptionMenu(window, direction_var, "Horario", "Antihorario")
+direction_menu.pack()
+
+# Botón para cambiar la dirección
+change_direction_button = tk.Button(window, text="Cambiar Dirección", command=change_direction)
+change_direction_button.pack()
+
+# Botón para iniciar el motor
+start_motor_button = tk.Button(window, text="Iniciar Motor", command=start_motor)
+start_motor_button.pack()
+
+# Botón para detener el motor
+stop_motor_button = tk.Button(window, text="Detener Motor", command=stop_motor)
+stop_motor_button.pack()
+
+# Ejecutar la ventana de la interfaz gráfica
+window.mainloop()
